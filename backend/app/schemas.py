@@ -28,6 +28,24 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class SkippedRow(BaseModel):
+    """导入时被跳过的台账行：列出物理行号与跳过原因。"""
+
+    line: int
+    reason: str
+
+
+class ImportResult(BaseModel):
+    """费用台账批量导入结果：更新/补登记计数与逐行跳过明细。"""
+
+    ok: bool = True
+    total: int = 0
+    updated: int = 0
+    created: int = 0
+    skipped: list[SkippedRow] = Field(default_factory=list)
+    message: str = ""
+
+
 
 class FleetEntry(BaseModel):
     """冷链车明细结构。"""
