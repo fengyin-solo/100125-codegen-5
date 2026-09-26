@@ -28,6 +28,30 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class ImportPayload(BaseModel):
+    """批量导入台账文件时提交的文件名与文本内容（前端读成文本后整体上送）。"""
+
+    filename: str = ""
+    content: str = ""
+
+
+class ImportSkip(BaseModel):
+    """导入时被整行跳过的记录：row 为文件行号（表头算第 1 行）。"""
+
+    row: int
+    reason: str
+
+
+class ImportResult(BaseModel):
+    """批量导入结果：更新/补登条数，以及逐行跳过的行号与原因。"""
+
+    ok: bool
+    message: str
+    updated: int = 0
+    created: int = 0
+    skipped: list[ImportSkip] = Field(default_factory=list)
+
+
 
 class FleetEntry(BaseModel):
     """冷链车明细结构。"""
